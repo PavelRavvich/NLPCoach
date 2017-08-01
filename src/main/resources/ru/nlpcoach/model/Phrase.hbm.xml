@@ -5,13 +5,13 @@
 
 <hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping">
 
-    <class name="ru.nlpcoach.model.Phrase" table="users">
+    <class name="ru.nlpcoach.model.Phrase" table="phrases">
 
         <id name="id" column="id" type="integer">
             <generator class="identity"/>
         </id>
 
-        <property name="phrase" column="phrase"/>
+        <property name="jsonPhrase" column="phrase"/>
 
     </class>
 </hibernate-mapping>
