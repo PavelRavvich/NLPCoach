@@ -2,52 +2,112 @@ package ru.nlpcoach.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import ru.nlpcoach.model.Phrase;
+import org.hibernate.Transaction;
+import ru.nlpcoach.model.Point;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.Serializable;
 
 public class DAOImpl implements DAO {
     /**
      * Connection factory to database.
      */
-    private final AtomicReference<SessionFactory> factory;
+    private final SessionFactory factory;
 
     /**
      * Default constructor.
      *
      * @param factory of connection to database.
      */
-    public DAOImpl(final AtomicReference<SessionFactory> factory) {
+    public DAOImpl(final SessionFactory factory) {
         this.factory = factory;
     }
 
     @Override
-    public List<Phrase> getSprintSet() {
+    public Point getPoint(int id) {
 
-        List<Phrase> result;
+        Point result;
 
-        final String hql = String.format("%s%s", "select p from Phrase p ",
-                "where p.id > 0");
+        try (final Session session = factory.openSession()) {
 
-        try (final Session session = factory.get().openSession()) {
+            final Transaction tx = session.beginTransaction();
 
-            result = session.createQuery(hql, Phrase.class).getResultList();
+            result = session.get(Point.class, id);
+
+            tx.commit();
+
+            return result;
         }
-
-        return result;
     }
 
     @Override
-    public void addPhrase(final Phrase phrase) {
+    public int savePoint(final Point point) {
 
-        try (final Session session = factory.get().openSession()) {
+        int id;
+
+        try (final Session session = factory.openSession()) {
 
             session.beginTransaction();
 
-            session.save(phrase);
+            id = (int) session.save(point);
+
+            session.getTransaction().commit();
+
+            return id;
+        }
+    }
+
+    @Override
+    public void deletePointById(final Point point) {
+
+        try (final Session session = factory.openSession()) {
+
+            session.beginTransaction();
+
+            session.delete(point);
 
             session.getTransaction().commit();
         }
     }
+
+    @Override
+    public void updatePoint(Point point) {
+
+        try (final Session session = factory.openSession()) {
+
+            session.beginTransaction();
+
+            session.update(point);
+
+            session.getTransaction().commit();
+        }
+    }
+
+//    @Override
+//    public List<Phrase> getSprintSet() {
+//
+//        List<Phrase> result;
+//
+//        final String hql = String.format("%s%s", "select p from Phrase p ",
+//                "where p.id > 0");
+//
+//        try (final Session session = factory.openSession()) {
+//
+//            result = session.createQuery(hql, Phrase.class).getResultList();
+//        }
+//
+//        return result;
+//    }
+//
+//    @Override
+//    public void addPhrase(final Phrase phrase) {
+//
+//        try (final Session session = factory.openSession()) {
+//
+//            session.beginTransaction();
+//
+//            session.save(phrase);
+//
+//            session.getTransaction().commit();
+//        }
+//    }
 }

@@ -1,8 +1,13 @@
 CREATE DATABASE nlp ENCODING 'UTF8';
 
+CREATE TABLE IF NOT EXISTS comment (
+    
+);
+
 CREATE TABLE IF NOT EXISTS phrases (
     id SERIAL NOT NULL ,
-    jsonPhrase TEXT NOT NULL ,
+    x INTEGER NOT NULL ,
+    y TIMESTAMP NOT NULL ,
     PRIMARY KEY (id)
 );
 

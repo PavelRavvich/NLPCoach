@@ -1,11 +1,10 @@
 package ru.nlpcoach.dao;
 
-import ru.nlpcoach.model.Phrase;
-
-import java.util.List;
+import ru.nlpcoach.model.Point;
 
 public interface DAO {
-    List<Phrase> getSprintSet();
-
-    void addPhrase(Phrase phrase);
+    Point getPoint(int id);
+    int savePoint(Point point);
+    void deletePointById(Point point);
+    void updatePoint(Point point);
 }
